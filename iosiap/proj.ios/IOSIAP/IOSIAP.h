@@ -25,22 +25,21 @@
 #import <Foundation/Foundation.h>
 #import <StoreKit/StoreKit.h>
 #import "IAPWrapper.h"
-@interface IOSIAP : NSObject<InterfaceIAP,SKProductsRequestDelegate,SKPaymentTransactionObserver>
+@interface IOSIAP : NSObject<InterfaceIAP>
 
 /**
  interface of InterfaceIAP
  **/
 - (void) configDeveloperInfo: (NSMutableDictionary*) cpInfo;
 - (void) payForProduct: (NSMutableDictionary*) profuctInfo;
-- (void) payForProductRequest: (NSMutableDictionary*) profuctInfo;
 - (void) restoreCompletedTransactions;
-- (void) addObserver;
-- (void) verifyReceiptValidation: (NSString*)productID withReceipt:(NSString*) receipt;
 - (void) setDebugMode: (BOOL) debug;
 - (NSString*) getSDKVersion;
 - (NSString*) getPluginVersion;
-// when complete payment whether success or fail call this function
-- (void)finishTransactionByID:(NSString *)productId;
+
+
+- (void) requestProducts: (NSMutableDictionary*) profuctInfo;
+
 
 @property BOOL debug;
 

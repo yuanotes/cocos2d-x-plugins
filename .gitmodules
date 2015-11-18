@@ -1,0 +1,3 @@
+[submodule "iosiap/proj.ios/RMStore"]
+	path = iosiap/proj.ios/RMStore
+	url = https://github.com/yuanotes/RMStore
