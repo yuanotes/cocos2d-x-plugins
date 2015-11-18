@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "8CC84D3ABC274720DC6F6CD1B514FFA356E16E85",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "1FE768A6E3F335991FAB8545582007344B279B56" : 0,
+    "8CC84D3ABC274720DC6F6CD1B514FFA356E16E85" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "4124C203-8A27-4193-A481-24A60F45E58B",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "1FE768A6E3F335991FAB8545582007344B279B56" : "..",
+    "8CC84D3ABC274720DC6F6CD1B514FFA356E16E85" : "plugin\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "PluginiAd",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "plugins\/iad\/proj.ios\/PluginiAd.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "gitlab.com:joycastle\/tintage.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "1FE768A6E3F335991FAB8545582007344B279B56"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:yuanotes\/cocos2d-x-plugins.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "8CC84D3ABC274720DC6F6CD1B514FFA356E16E85"
+    }
+  ]
+}

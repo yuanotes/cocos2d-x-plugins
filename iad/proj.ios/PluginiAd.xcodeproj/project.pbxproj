@@ -1,0 +1,253 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1C584FC91BD4E2CD00EE2398 /* AdsiAd.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C584FC81BD4E2CD00EE2398 /* AdsiAd.m */; settings = {ASSET_TAGS = (); }; };
+		1C584FCB1BD4E66B00EE2398 /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1C584FCA1BD4E66B00EE2398 /* iAd.framework */; };
+		FADC44AB176EA82000B2D5ED /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FADC44AA176EA82000B2D5ED /* Foundation.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		FADC44A5176EA82000B2D5ED /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/${PRODUCT_NAME}";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		1C584FC71BD4E2CD00EE2398 /* AdsiAd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdsiAd.h; sourceTree = "<group>"; };
+		1C584FC81BD4E2CD00EE2398 /* AdsiAd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdsiAd.m; sourceTree = "<group>"; };
+		1C584FCA1BD4E66B00EE2398 /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
+		FADC44A7176EA82000B2D5ED /* libPluginiAd.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPluginiAd.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		FADC44AA176EA82000B2D5ED /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		FADC44C7176EA85F00B2D5ED /* PluginiAd-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PluginiAd-Prefix.pch"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		FADC44A4176EA82000B2D5ED /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1C584FCB1BD4E66B00EE2398 /* iAd.framework in Frameworks */,
+				FADC44AB176EA82000B2D5ED /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		FADC449E176EA82000B2D5ED = {
+			isa = PBXGroup;
+			children = (
+				1C584FC71BD4E2CD00EE2398 /* AdsiAd.h */,
+				1C584FC81BD4E2CD00EE2398 /* AdsiAd.m */,
+				FADC44C7176EA85F00B2D5ED /* PluginiAd-Prefix.pch */,
+				FADC44A9176EA82000B2D5ED /* Frameworks */,
+				FADC44A8176EA82000B2D5ED /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		FADC44A8176EA82000B2D5ED /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FADC44A7176EA82000B2D5ED /* libPluginiAd.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		FADC44A9176EA82000B2D5ED /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1C584FCA1BD4E66B00EE2398 /* iAd.framework */,
+				FADC44AA176EA82000B2D5ED /* Foundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		FADC44A6176EA82000B2D5ED /* PluginiAd */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FADC44B5176EA82000B2D5ED /* Build configuration list for PBXNativeTarget "PluginiAd" */;
+			buildPhases = (
+				FADC44A3176EA82000B2D5ED /* Sources */,
+				FADC44A4176EA82000B2D5ED /* Frameworks */,
+				FADC44A5176EA82000B2D5ED /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PluginiAd;
+			productName = PluginAdmob;
+			productReference = FADC44A7176EA82000B2D5ED /* libPluginiAd.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		FADC449F176EA82000B2D5ED /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0460;
+				ORGANIZATIONNAME = "cocos2d-x";
+			};
+			buildConfigurationList = FADC44A2176EA82000B2D5ED /* Build configuration list for PBXProject "PluginiAd" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = FADC449E176EA82000B2D5ED;
+			productRefGroup = FADC44A8176EA82000B2D5ED /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				FADC44A6176EA82000B2D5ED /* PluginiAd */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		FADC44A3176EA82000B2D5ED /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1C584FC91BD4E2CD00EE2398 /* AdsiAd.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		FADC44B3176EA82000B2D5ED /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		FADC44B4176EA82000B2D5ED /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		FADC44B6176EA82000B2D5ED /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
+				CLANG_CXX_LIBRARY = "compiler-default";
+				DSTROOT = /tmp/PluginAdmob.dst;
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "PluginiAd-Prefix.pch";
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../../protocols/platform/ios";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Admob\"",
+				);
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = PluginiAd;
+				SKIP_INSTALL = YES;
+				VALID_ARCHS = "arm64 armv7";
+			};
+			name = Debug;
+		};
+		FADC44B7176EA82000B2D5ED /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
+				CLANG_CXX_LIBRARY = "compiler-default";
+				DSTROOT = /tmp/PluginAdmob.dst;
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "PluginiAd-Prefix.pch";
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../../protocols/platform/ios";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Admob\"",
+				);
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = PluginiAd;
+				SKIP_INSTALL = YES;
+				VALID_ARCHS = "arm64 armv7";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		FADC44A2176EA82000B2D5ED /* Build configuration list for PBXProject "PluginiAd" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FADC44B3176EA82000B2D5ED /* Debug */,
+				FADC44B4176EA82000B2D5ED /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FADC44B5176EA82000B2D5ED /* Build configuration list for PBXNativeTarget "PluginiAd" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FADC44B6176EA82000B2D5ED /* Debug */,
+				FADC44B7176EA82000B2D5ED /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = FADC449F176EA82000B2D5ED /* Project object */;
+}
