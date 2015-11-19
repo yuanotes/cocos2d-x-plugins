@@ -11,6 +11,8 @@
 		05A9358719260E2E00F08DC0 /* IOSIAP.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05A9358619260E2E00F08DC0 /* IOSIAP.h */; };
 		05A9358919260E2F00F08DC0 /* IOSIAP.m in Sources */ = {isa = PBXBuildFile; fileRef = 05A9358819260E2E00F08DC0 /* IOSIAP.m */; };
 		05A935B119260FF000F08DC0 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05A935B019260FF000F08DC0 /* StoreKit.framework */; };
+		1C81152E1BFDCCD800C2A3E8 /* CheckSubscription.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C81152D1BFDCCD800C2A3E8 /* CheckSubscription.m */; };
+		1C8115331BFDDDEB00C2A3E8 /* RMStoreUserDefaultsPersistence.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C8115321BFDDDEB00C2A3E8 /* RMStoreUserDefaultsPersistence.m */; };
 		1CB4AA211BFC550F009A1C10 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CB4A9DF1BFC550F009A1C10 /* libcrypto.a */; };
 		1CB4AA221BFC550F009A1C10 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CB4A9E01BFC550F009A1C10 /* libssl.a */; };
 		1CB4AA231BFC550F009A1C10 /* RMAppReceipt.m in Sources */ = {isa = PBXBuildFile; fileRef = 1CB4A9E21BFC550F009A1C10 /* RMAppReceipt.m */; };
@@ -42,6 +44,10 @@
 		05A9358F19260E2F00F08DC0 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		05A9359219260E2F00F08DC0 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		05A935B019260FF000F08DC0 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		1C81152D1BFDCCD800C2A3E8 /* CheckSubscription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CheckSubscription.m; sourceTree = "<group>"; };
+		1C81152F1BFDCCEE00C2A3E8 /* CheckSubscription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CheckSubscription.h; sourceTree = "<group>"; };
+		1C8115311BFDDDEB00C2A3E8 /* RMStoreUserDefaultsPersistence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMStoreUserDefaultsPersistence.h; sourceTree = "<group>"; };
+		1C8115321BFDDDEB00C2A3E8 /* RMStoreUserDefaultsPersistence.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMStoreUserDefaultsPersistence.m; sourceTree = "<group>"; };
 		1CB4A98E1BFC550F009A1C10 /* AppleIncRootCertificate.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = AppleIncRootCertificate.cer; sourceTree = "<group>"; };
 		1CB4A9931BFC550F009A1C10 /* aes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aes.h; sourceTree = "<group>"; };
 		1CB4A9941BFC550F009A1C10 /* asn1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = asn1.h; sourceTree = "<group>"; };
@@ -179,9 +185,11 @@
 		05A9358319260E2E00F08DC0 /* IOSIAP */ = {
 			isa = PBXGroup;
 			children = (
+				1C81152F1BFDCCEE00C2A3E8 /* CheckSubscription.h */,
 				05A9358619260E2E00F08DC0 /* IOSIAP.h */,
 				05A9358819260E2E00F08DC0 /* IOSIAP.m */,
 				05A9358419260E2E00F08DC0 /* Supporting Files */,
+				1C81152D1BFDCCD800C2A3E8 /* CheckSubscription.m */,
 			);
 			path = IOSIAP;
 			sourceTree = "<group>";
@@ -215,6 +223,8 @@
 		1CB4A98D1BFC550F009A1C10 /* Optional */ = {
 			isa = PBXGroup;
 			children = (
+				1C8115311BFDDDEB00C2A3E8 /* RMStoreUserDefaultsPersistence.h */,
+				1C8115321BFDDDEB00C2A3E8 /* RMStoreUserDefaultsPersistence.m */,
 				1CB4A98E1BFC550F009A1C10 /* AppleIncRootCertificate.cer */,
 				1CB4A98F1BFC550F009A1C10 /* openssl-1.0.1e */,
 				1CB4A9E11BFC550F009A1C10 /* RMAppReceipt.h */,
@@ -388,11 +398,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1C81152E1BFDCCD800C2A3E8 /* CheckSubscription.m in Sources */,
 				1CB4AA271BFC550F009A1C10 /* RMStoreTransactionReceiptVerifier.m in Sources */,
 				1CB4AA291BFC550F009A1C10 /* RMStore.m in Sources */,
 				1CB4AA231BFC550F009A1C10 /* RMAppReceipt.m in Sources */,
 				05A9358919260E2F00F08DC0 /* IOSIAP.m in Sources */,
 				1CB4AA261BFC550F009A1C10 /* RMStoreTransaction.m in Sources */,
+				1C8115331BFDDDEB00C2A3E8 /* RMStoreUserDefaultsPersistence.m in Sources */,
 				1CB4AA241BFC550F009A1C10 /* RMStoreAppReceiptVerifier.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

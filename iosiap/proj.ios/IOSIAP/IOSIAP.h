@@ -32,13 +32,15 @@
  **/
 - (void) configDeveloperInfo: (NSMutableDictionary*) cpInfo;
 - (void) payForProduct: (NSMutableDictionary*) profuctInfo;
+- (void) purchaseSubscription: (NSMutableDictionary *) subInfo;
+- (void) requestProducts:(NSMutableArray *)profuctInfo;
 - (void) restoreCompletedTransactions;
+- (void) checkSubscription: (NSMutableDictionary*) subInfo;
 - (void) setDebugMode: (BOOL) debug;
 - (NSString*) getSDKVersion;
 - (NSString*) getPluginVersion;
 
 
-- (void) requestProducts: (NSMutableDictionary*) profuctInfo;
 
 
 @property BOOL debug;

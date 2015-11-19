@@ -24,9 +24,13 @@
 
 #import "IOSIAP.h"
 #import "RMStore.h"
-
+#import "RMAppReceipt.h"
 #import "RMStoreAppReceiptVerifier.h"
 #import "RMStoreTransactionReceiptVerifier.h"
+
+#import "RMStoreUserDefaultsPersistence.h"
+
+#import "CheckSubscription.h"
 
 #define OUTPUT_LOG(...)     if (self.debug) NSLog(__VA_ARGS__);
 
@@ -39,27 +43,18 @@
         const BOOL iOS7OrHigher = floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1;
         _receiptVerifier = iOS7OrHigher ? [[RMStoreAppReceiptVerifier alloc] init] : [[RMStoreTransactionReceiptVerifier alloc] init];
         [RMStore defaultStore].receiptVerifier = _receiptVerifier;
+        
+        // For devices with os version before 7.0 to verify subscription.
+         RMStoreUserDefaultsPersistence* persistence = [[RMStoreUserDefaultsPersistence alloc] init];
+        [RMStore defaultStore].transactionPersistor = persistence;
     }
     return self;
 }
 -(void) configDeveloperInfo: (NSMutableDictionary*) cpInfo{}
 -(void) payForProduct: (NSMutableDictionary*) cpInfo{
     NSString* productID = [cpInfo objectForKey:@"IAPId"];
-    NSString* isSubscription = [cpInfo objectForKey:@"IsSubscription"];
-    NSString* currentTimeStr = [cpInfo objectForKey:@"CurrentTime"];
-    NSDate * currentTime = [NSDate date];
-    if (currentTimeStr){
-        currentTime = [NSDate dateWithTimeIntervalSince1970:currentTimeStr.doubleValue];
-    }
     
     if (productID){
-        if (isSubscription){
-            [_receiptVerifier observeVerifySubscription:productID currentTime:currentTime success:^(NSDate *expireDate) {
-                NSTimeInterval time = expireDate.timeIntervalSince1970;
-                NSString* timeStr = [NSString stringWithFormat:@"%f", time];
-                [IAPWrapper onPayResult:self withRet:SubscriptionVerifySuccess withMsg:timeStr];
-            }];
-        }
         [[RMStore defaultStore] requestProducts:[NSSet setWithObjects:productID, nil] success:^(NSArray *products, NSArray *invalidProductIdentifiers) {
             [[RMStore defaultStore]addPayment:productID success:^(SKPaymentTransaction *transaction) {
                 [IAPWrapper onPayResult:self withRet:PaymentTransactionStatePurchased withMsg:transaction.payment.productIdentifier];
@@ -69,28 +64,74 @@
         } failure:^(NSError *error) {
             [IAPWrapper onPayResult:self withRet:PaymentTransactionStateFailed withMsg:@""];
         }];
+    } else {
+        [IAPWrapper onPayResult:self withRet:PaymentTransactionStateFailed withMsg:@""];
     }
 
 }
--(void) requestProducts:(NSMutableDictionary *)profuctInfo{
+-(void) requestProducts:(NSMutableArray *)productInfo{
+    NSSet* productIDSet = [NSSet setWithArray:productInfo];
+    [[RMStore defaultStore] requestProducts:productIDSet success:^(NSArray *products, NSArray *invalidProductIdentifiers) {
+        [IAPWrapper onRequestProduct:self withRet:RequestSuccees withProducts:products];
+    } failure:^(NSError *error) {
+        [IAPWrapper onRequestProduct:self withRet:RequestFail withProducts:nil];
+    }];
     
 }
+-(void) purchaseSubscription:(NSMutableDictionary *)subInfo {
+    NSString* productID = [subInfo objectForKey:@"IAPId"];
+    if (productID){
+        [[RMStore defaultStore] requestProducts:[NSSet setWithObjects:productID, nil] success:^(NSArray *products, NSArray *invalidProductIdentifiers) {
+            [[RMStore defaultStore]addPayment:productID success:^(SKPaymentTransaction *transaction) {
+                [self checkSubscription:subInfo];
+            } failure:^(SKPaymentTransaction *transaction, NSError *error) {
+                [IAPWrapper onCheckSubscriptionResult:self withRet:SubscriptionVerifyFailed withMsg:@""];
+            }];
+        } failure:^(NSError *error) {
+            [IAPWrapper onCheckSubscriptionResult:self withRet:SubscriptionVerifyFailed withMsg:@""];
+        }];
+    } else {
+        [IAPWrapper onCheckSubscriptionResult:self withRet:SubscriptionVerifyFailed withMsg:@""];
+    }
+}
+
+-(void) checkSubscription:(NSMutableDictionary *)subInfo {
+    NSString* productID = [subInfo objectForKey:@"IAPId"];
+    NSString* currentTimeStr = [subInfo objectForKey:@"CurrentTime"];
+    NSDate * currentTime = [NSDate date];
+    if (currentTimeStr){
+        currentTime = [NSDate dateWithTimeIntervalSince1970:currentTimeStr.doubleValue];
+    }
+    
+    if (productID){
+        const BOOL iOS7OrHigher = floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1;
+        if (iOS7OrHigher){
+            [CheckSubscription checkWithAppReceipt:productID currentTime:currentTime success:^{
+                [IAPWrapper onCheckSubscriptionResult:self withRet:SubscriptionVerifySuccess withMsg:productID];
+            } fail:^{
+                [IAPWrapper onCheckSubscriptionResult:self withRet:SubscriptionVerifyFailed withMsg:@""];
+            }];
+        } else {
+            [CheckSubscription checkWithTransactionReceipt:productID currentTime:currentTime success:^{
+                [IAPWrapper onCheckSubscriptionResult:self withRet:SubscriptionVerifySuccess withMsg:productID];
+            } fail:^{
+                [IAPWrapper onCheckSubscriptionResult:self withRet:SubscriptionVerifyFailed withMsg:@""];
+            }];
+        }
+    } else {
+        [IAPWrapper onCheckSubscriptionResult:self withRet:SubscriptionVerifyFailed withMsg:@""];
+    }
+}
+
 - (void)restoreCompletedTransactions {
     [[RMStore defaultStore] restoreTransactionsOnSuccess:^(NSArray *transactionArray) {
-        NSString* productIDList = @"";
-        for (NSInteger i = 0; i < transactionArray.count; i++) {
-            SKPaymentTransaction* tran = [transactionArray objectAtIndex:i];
-            if (i != transactionArray.count - 1){
-                productIDList = [productIDList stringByAppendingFormat:@"%@,", tran.payment.productIdentifier];
-            }
-        }
         if (transactionArray.count > 0){
-            [IAPWrapper onPayResult:self withRet:PaymentTransactionStateRestored  withMsg:productIDList];
+            [IAPWrapper onRestoreProduct:self withRet:ProductRestored withProducts:transactionArray];
         } else {
-            [IAPWrapper onPayResult:self withRet:PaymentTransactionStateFailed withMsg:@"No products."];
+            [IAPWrapper onRestoreProduct:self withRet:ProductRestoreFailed withProducts:nil];
         }
     } failure:^(NSError *error) {
-        [IAPWrapper onPayResult:self withRet:PaymentTransactionStateFailed withMsg:@""];
+        [IAPWrapper onRestoreProduct:self withRet:ProductRestoreFailed withProducts:nil];
     }];
 }
 
