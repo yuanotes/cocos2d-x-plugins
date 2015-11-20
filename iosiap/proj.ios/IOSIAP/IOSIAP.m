@@ -83,7 +83,7 @@
     if (productID){
         [[RMStore defaultStore] requestProducts:[NSSet setWithObjects:productID, nil] success:^(NSArray *products, NSArray *invalidProductIdentifiers) {
             [[RMStore defaultStore]addPayment:productID success:^(SKPaymentTransaction *transaction) {
-                [self checkSubscription:subInfo];
+                [IAPWrapper onCheckSubscriptionResult:self withRet:SubscriptionVerifySuccess withMsg:@""];
             } failure:^(SKPaymentTransaction *transaction, NSError *error) {
                 [IAPWrapper onCheckSubscriptionResult:self withRet:SubscriptionVerifyFailed withMsg:@""];
             }];
