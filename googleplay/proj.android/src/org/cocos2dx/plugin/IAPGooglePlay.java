@@ -28,13 +28,11 @@ THE SOFTWARE.
 
 package org.cocos2dx.plugin;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
-import org.cocos2dx.plugin.util.IabHelper;
-import org.cocos2dx.plugin.util.IabResult;
-import org.cocos2dx.plugin.util.Inventory;
-import org.cocos2dx.plugin.util.Purchase;
+import org.cocos2dx.plugin.util.*;
 
 import android.app.Activity;
 import android.content.Context;
@@ -110,53 +108,47 @@ public class IAPGooglePlay implements InterfaceIAP, PluginListener {
                 final String iapId = productInfo.get("IAPId");
                 String iapSecKey = productInfo.get("IAPSecKey");
                 String nonConsumable = productInfo.get("NonConsumable");
-                try{
-                    if (nonConsumable == null || nonConsumable.equals("") || nonConsumable.length() == 0){
-                        mHelper.launchPurchaseFlow((Activity)mContext, iapId, RC_REQUEST, new IabHelper.OnIabPurchaseFinishedListener() {
-                            @Override
-                            public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
-                                if (result.getResponse() == IabHelper.BILLING_RESPONSE_RESULT_ITEM_ALREADY_OWNED){
-                                    mHelper.queryInventoryAsync(new IabHelper.QueryInventoryFinishedListener() {
-                                        public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
-                                            // Have we been disposed of in the meantime? If so, quit.
-                                            if (mHelper == null) return;
-                                            // Is it a failure?
-                                            if (result.isFailure()) {
-                                                return;
-                                            }
-                                            Purchase purchase = inventory.getPurchase(iapId);
-                                            if (purchase != null){
-                                                mHelper.consumeAsync(purchase, mConsumeFinishedListener);
-                                            }
+                if (nonConsumable == null || nonConsumable.equals("") || nonConsumable.length() == 0){
+                    mHelper.launchPurchaseFlow((Activity)mContext, iapId, RC_REQUEST, new IabHelper.OnIabPurchaseFinishedListener() {
+                        @Override
+                        public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
+                            if (result.getResponse() == IabHelper.BILLING_RESPONSE_RESULT_ITEM_ALREADY_OWNED){
+                                mHelper.queryInventoryAsync(new IabHelper.QueryInventoryFinishedListener() {
+                                    public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
+                                        // Have we been disposed of in the meantime? If so, quit.
+                                        if (mHelper == null) return;
+                                        // Is it a failure?
+                                        if (result.isFailure()) {
+                                            return;
                                         }
-                                    });
-                                } else if (result.isFailure()) {
-                                    failPurchase(result.getMessage());
-                                } else {
-                                    mHelper.consumeAsync(purchase, mConsumeFinishedListener);
-                                }
+                                        Purchase purchase = inventory.getPurchase(iapId);
+                                        if (purchase != null){
+                                            mHelper.consumeAsync(purchase, mConsumeFinishedListener);
+                                        }
+                                    }
+                                });
+                            } else if (result.isFailure()) {
+                                failPurchase(result.getMessage());
+                            } else {
+                                mHelper.consumeAsync(purchase, mConsumeFinishedListener);
                             }
-                        }, iapSecKey);
-                    } else {
-                        mHelper.launchPurchaseFlow((Activity)mContext, iapId, RC_REQUEST, new IabHelper.OnIabPurchaseFinishedListener() {
-                            @Override
-                            public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
-                                if (result.getResponse() == IabHelper.BILLING_RESPONSE_RESULT_ITEM_ALREADY_OWNED){
-                                    // purchase may be null
-                                    succeedPurchase(iapId);
-                                } else if (result.isFailure()) {
-                                    failPurchase(result.getMessage());
-                                }
-                                else {
-                                    succeedPurchase(purchase.getSku());
-                                }
+                        }
+                    }, iapSecKey);
+                } else {
+                    mHelper.launchPurchaseFlow((Activity)mContext, iapId, RC_REQUEST, new IabHelper.OnIabPurchaseFinishedListener() {
+                        @Override
+                        public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
+                            if (result.getResponse() == IabHelper.BILLING_RESPONSE_RESULT_ITEM_ALREADY_OWNED){
+                                // purchase may be null
+                                succeedPurchase(iapId);
+                            } else if (result.isFailure()) {
+                                failPurchase(result.getMessage());
                             }
-                        }, iapSecKey);
-                    }
-                }
-                catch(IllegalStateException ex){
-                	LogD("Please retry in a few seconds.");
-                    mHelper.flagEndAsync();
+                            else {
+                                succeedPurchase(purchase.getSku());
+                            }
+                        }
+                    }, iapSecKey);
                 }
             }
         });
@@ -164,10 +156,10 @@ public class IAPGooglePlay implements InterfaceIAP, PluginListener {
 
     public void restore() {
         if (! mSetUpSucceed ) {
-            failPurchase("Google Pay Services setup failed.");
+            failedRestore();
         }
         if (! networkReachable()) {
-            failPurchase("Network Unreachable");
+            failedRestore();
             return;
         }
         PluginWrapper.runOnMainThread(new Runnable() {
@@ -181,27 +173,121 @@ public class IAPGooglePlay implements InterfaceIAP, PluginListener {
 
                         // Is it a failure?
                         if (result.isFailure()) {
-                            failPurchase("Failed to restore products: " + result.getMessage());
+                            failedRestore();
                             return;
                         }
-                        StringBuilder sb = new StringBuilder();
                         List<String> allSkus = inv.getAllOwnedSkus();
                         if (allSkus.size() > 0){
-                            for (int i = 0 ; i < allSkus.size(); i++){
-                                sb.append(allSkus.get(i));
-                                if (i < allSkus.size() - 1){
-                                    sb.append(",");
-                                }
-                            }
-                            restoredPurchase(sb.toString());
+                            succeedRestore((ArrayList<String>)allSkus);
                         } else {
-                            failPurchase("No purchase to be restored.");
+                            failedRestore();
                         }
                     }
                 });
             }
         });
     }
+
+    public void requestProducts(){
+        if (! mSetUpSucceed ) {
+            failRequest();
+        }
+        if (! networkReachable()) {
+            failRequest();
+            return;
+        }
+        PluginWrapper.runOnMainThread(new Runnable() {
+            @Override
+            public void run() {
+                mHelper.queryInventoryAsync(new IabHelper.QueryInventoryFinishedListener() {
+                    @Override
+                    public void onQueryInventoryFinished(IabResult result, Inventory inv) {
+                        // Have we been disposed of in the meantime? If so, quit.
+                        if (mHelper == null) return;
+
+                        // Is it a failure?
+                        if (result.isFailure()) {
+                            failRequest();
+                            return;
+                        }
+                        List<SkuDetails> allSkus = inv.getAllSkus();
+                        ArrayList<Hashtable<String, String>> productsList = new ArrayList<Hashtable<String, String>>();
+                        if (allSkus.size() > 0){
+                            for(SkuDetails sd : allSkus){
+                                Hashtable<String, String> product = new Hashtable<String, String>();
+                                product.put("productId", sd.getSku());
+                                product.put("productName", sd.getTitle());
+                                product.put("productPrice", sd.getPrice());
+                                product.put("productDesc", sd.getDescription());
+                                productsList.add(product);
+                            }
+                            successRequest(productsList);
+                        } else {
+                            failRequest();
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    public void purchaseSubscription(Hashtable<String, String> productInfo){
+        if (! mSetUpSucceed ) {
+            failSubscribe("Google Pay Services setup failed.");
+        }
+        if (! networkReachable()) {
+            failSubscribe("Network Unreachable");
+            return;
+        }
+        final String iapId = productInfo.get("IAPId");
+        final String iapSecKey = productInfo.get("IAPSecKey");
+        PluginWrapper.runOnMainThread(new Runnable() {
+            @Override
+            public void run() {
+                mHelper.launchSubscriptionPurchaseFlow((Activity)mContext, iapId, RC_REQUEST, new IabHelper.OnIabPurchaseFinishedListener() {
+                    @Override
+                    public void onIabPurchaseFinished(IabResult result, Purchase info) {
+                        if (result.isSuccess()){
+                            if (info.isAutoRenewing()){
+                                succeedSubscribe(info.getSku());
+                                return;
+                            }
+                        }
+                        failSubscribe("");
+                    }
+                }, iapSecKey);
+            }
+        });
+    }
+    public void checkSubscriptions(Hashtable<String, String> productInfo){
+        if (! mSetUpSucceed ) {
+            failSubscribe("Google Pay Services setup failed.");
+        }
+        if (! networkReachable()) {
+            failSubscribe("Network Unreachable");
+            return;
+        }
+        final String iapId = productInfo.get("IAPId");
+        PluginWrapper.runOnMainThread(new Runnable() {
+            @Override
+            public void run() {
+                mHelper.queryInventoryAsync(new IabHelper.QueryInventoryFinishedListener() {
+                    @Override
+                    public void onQueryInventoryFinished(IabResult result, Inventory inv) {
+                        if (result.isSuccess()){
+                            Purchase p = inv.getPurchase(iapId);
+                            if (p.isAutoRenewing()){
+                                succeedSubscribe(iapId);
+                                return;
+                            }
+                        }
+                        failSubscribe("");
+                    }
+                });
+            }
+        });
+    }
+
 
     @Override
     public void setDebugMode(boolean debug) {
@@ -223,7 +309,7 @@ public class IAPGooglePlay implements InterfaceIAP, PluginListener {
         try {
             ConnectivityManager conn = (ConnectivityManager)mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo netInfo = conn.getActiveNetworkInfo();
-            bRet = (null == netInfo) ? false : netInfo.isAvailable();
+            bRet = (null != netInfo) && netInfo.isAvailable();
         } catch (Exception e) {
             LogE("Fail to check network status", e);
         }
@@ -295,17 +381,17 @@ public class IAPGooglePlay implements InterfaceIAP, PluginListener {
         }
     };
 
-    void restoredPurchase(String msg){
-        IAPWrapper.onPayResult(mAdapter, IAPWrapper.PAYRESULT_RESTORED, msg);
-    }
+    void succeedRestore(ArrayList<String> products){ IAPWrapper.onRestoreResult(mAdapter, IAPWrapper.RESTORE_SUCCESS, products); }
+    void failedRestore(){ IAPWrapper.onRestoreResult(mAdapter, IAPWrapper.RESTORE_FAIL, null); }
 
-    void succeedPurchase(String msg) {
-        IAPWrapper.onPayResult(mAdapter, IAPWrapper.PAYRESULT_SUCCESS, msg);
-    }
+    void successRequest(ArrayList<Hashtable<String, String>> products){ IAPWrapper.onRequestResult(mAdapter, IAPWrapper.REQUEST_SUCCESS, products); }
+    void failRequest(){ IAPWrapper.onRequestResult(mAdapter, IAPWrapper.REQUEST_FAIL, null); }
 
-    void failPurchase(String msg) {
-        IAPWrapper.onPayResult(mAdapter, IAPWrapper.PAYRESULT_FAIL, msg);
-    }
+    void succeedSubscribe(String msg) { IAPWrapper.onCheckSubscriptionResult(mAdapter, IAPWrapper.SUBSCRIPTION_SUCCESS, msg); }
+    void failSubscribe(String msg) { IAPWrapper.onCheckSubscriptionResult(mAdapter, IAPWrapper.SUBSCRIPTION_FAIL, msg); }
+
+    void succeedPurchase(String msg) { IAPWrapper.onPayResult(mAdapter, IAPWrapper.PAYRESULT_SUCCESS, msg); }
+    void failPurchase(String msg) { IAPWrapper.onPayResult(mAdapter, IAPWrapper.PAYRESULT_FAIL, msg); }
 
     //@Override
     /**

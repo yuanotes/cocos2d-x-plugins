@@ -34,6 +34,6 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module" module-name="libPluginProtocol" exported="" />
+    <orderEntry type="module" module-name="libPluginProtocol" />
   </component>
 </module>

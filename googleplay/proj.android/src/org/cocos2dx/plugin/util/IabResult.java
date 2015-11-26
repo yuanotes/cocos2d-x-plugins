@@ -42,3 +42,4 @@ public class IabResult {
     public boolean isFailure() { return !isSuccess(); }
     public String toString() { return "IabResult: " + getMessage(); }
 }
+
