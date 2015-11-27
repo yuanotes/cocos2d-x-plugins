@@ -259,7 +259,7 @@ public class IAPGooglePlay implements InterfaceIAP, PluginListener {
             }
         });
     }
-    public void checkSubscriptions(Hashtable<String, String> productInfo){
+    public void checkSubscription(Hashtable<String, String> productInfo){
         if (! mSetUpSucceed ) {
             failSubscribe("Google Pay Services setup failed.");
         }
@@ -276,7 +276,7 @@ public class IAPGooglePlay implements InterfaceIAP, PluginListener {
                     public void onQueryInventoryFinished(IabResult result, Inventory inv) {
                         if (result.isSuccess()){
                             Purchase p = inv.getPurchase(iapId);
-                            if (p.isAutoRenewing()){
+                            if (p != null && p.isAutoRenewing()){
                                 succeedSubscribe(iapId);
                                 return;
                             }
